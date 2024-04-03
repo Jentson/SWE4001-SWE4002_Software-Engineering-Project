@@ -10,7 +10,7 @@
 		echo $staff_pass;
 		if ($row && password_verify($staff_pass, $row['Staff_pass'])) {
 			// Login successful, store session variables
-			echo '<script>alert("Login successful");</script>';
+			echo "Login successful";
 			session_start();
 			$_SESSION['Staff_id'] = $staff_id;
 			$_SESSION['Staff_pwd'] = $row['Staff_name'];
