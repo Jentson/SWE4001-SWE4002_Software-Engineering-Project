@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2024 at 10:52 AM
+-- Generation Time: Apr 03, 2024 at 10:14 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -66,8 +66,13 @@ CREATE TABLE `leave_application` (
 --
 
 INSERT INTO `leave_application` (`id`, `leave_ref`, `stud_id`, `stud_name`, `subj_code`, `startDate`, `endDate`, `reason`, `status`, `documents`) VALUES
-(1, '1234', 'J21035942', 'Darren Huang', 'ICT30010', '2023-06-01', '2023-06-04', 'Sure', '', NULL),
-(2, '1235', 'J21035942', 'Darren Huang', 'TNE20002', '2023-06-15', '2023-06-23', 'yes', '', NULL);
+(55, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'COS30019', '2024-04-10', '2024-04-12', 'T1', 'Pending', 0x2e2e2f66696c652f363630633163646430626435335f535550504f5254494e475f444f43532e706466),
+(56, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'TNE20002', '2024-04-03', '2024-04-12', 'Holiday to Japan', 'Pending', 0x2e2e2f66696c652f363630633164316238646438325f535550504f5254494e475f444f43532e706466),
+(57, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'COS30019', '2024-04-03', '2024-04-12', 'Holiday to Japan', 'Pending', 0x2e2e2f66696c652f363630633164316238646438325f535550504f5254494e475f444f43532e706466),
+(58, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'ICT30010', '2024-04-03', '2024-04-12', 'Holiday to Japan', 'Pending', 0x2e2e2f66696c652f363630633164316238646438325f535550504f5254494e475f444f43532e706466),
+(59, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'COS10009', '2024-04-03', '2024-04-12', 'Holiday to Japan', 'Pending', 0x2e2e2f66696c652f363630633164316238646438325f535550504f5254494e475f444f43532e706466),
+(60, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'COS30019', '2024-04-10', '2024-04-17', 'Holiday', 'Pending', 0x2e2e2f66696c652f363630633164363364613163635f524f4452494b434f5f54494f56414e44595f4c454156455f524551554553542e706466),
+(61, 'J22036755', 'J22036755', 'Rodrikco Tiovandy', 'TNE20002', '2024-04-10', '2024-04-17', 'Holiday', 'Pending', 0x2e2e2f66696c652f363630633164363364613163635f524f4452494b434f5f54494f56414e44595f4c454156455f524551554553542e706466);
 
 -- --------------------------------------------------------
 
@@ -82,6 +87,18 @@ CREATE TABLE `leave_application_assignment` (
   `lecturer_id` int(11) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `leave_application_assignment`
+--
+
+INSERT INTO `leave_application_assignment` (`id`, `leave_application_id`, `leave_ref`, `lecturer_id`, `status`) VALUES
+(54, 56, NULL, 123457, 'Pending'),
+(55, 57, NULL, 123458, 'Pending'),
+(56, 58, NULL, 123456, 'Pending'),
+(57, 59, NULL, 123459, 'Pending'),
+(58, 60, NULL, 123458, 'Pending'),
+(59, 61, NULL, 123457, 'Pending');
 
 -- --------------------------------------------------------
 
@@ -100,7 +117,8 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`Role_ID`, `Role_name`) VALUES
 (1, 'Dean'),
-(2, 'Lecturer');
+(2, 'Lecturer'),
+(3, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -131,8 +149,8 @@ INSERT INTO `session` (`Sess_ID`, `Sess_Number`) VALUES
 --
 
 CREATE TABLE `staff` (
-  `Staff_ID` int(10) NOT NULL,
-  `Staff_name` varchar(40) NOT NULL,
+  `staff_id` int(10) NOT NULL,
+  `staff_name` varchar(40) NOT NULL,
   `Staff_email` varchar(40) NOT NULL,
   `Staff_pass` varchar(80) NOT NULL,
   `Role_ID` int(2) NOT NULL
@@ -142,7 +160,7 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`Staff_ID`, `Staff_name`, `Staff_email`, `Staff_pass`, `Role_ID`) VALUES
+INSERT INTO `staff` (`staff_id`, `staff_name`, `Staff_email`, `Staff_pass`, `Role_ID`) VALUES
 (123456, 'Mohammad Faizal Alias', 'mfaizal.alias@newinti.edu.my', '123456', 2),
 (123457, 'Shanmuga Sundram A Samy', 'shanmugas.asamy@newinti.edu.my', '123456', 2),
 (123458, 'Chee Huei Ang', 'cheehuei.ang@newinti.edu.my', '123456', 2),
@@ -159,21 +177,21 @@ CREATE TABLE `students` (
   `stud_name` varchar(40) NOT NULL,
   `stud_email` varchar(40) NOT NULL,
   `stud_pass` varchar(80) NOT NULL,
-  `dept_ID` int(11) NOT NULL
+  `dept_ID` int(11) NOT NULL,
+  `session` varchar(20) NOT NULL,
+  `programme` varchar(20) NOT NULL,
+  `address` varchar(50) NOT NULL,
+  `phone` int(20) NOT NULL,
+  `semester` int(2) NOT NULL,
+  `major` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`stud_id`, `stud_name`, `stud_email`, `stud_pass`, `dept_ID`) VALUES
-('J123', 'Alice', 'alice@gmail.com', '$2y$10$y1hQRHtjQZTd7d20kGn.AuQKKtbUdMmm/vxue/4ywRewA/HoKxq/6', 1),
-('J1234', 'Bob', 'Bob2@gmail.com', '$2y$10$7qKR0.9abRI.Dyi2TPRRvuE/hsS.fCIxhWlyEHI3CEtttnTNHM49K', 1),
-('J125', 'Char', 'char@gmail.com', '$2y$10$Fc6EGTiPV3yND6P/94ehYOFZndyyE8Wu4rkIPArvU76/RpXOQs3JG', 1),
-('J21035942', 'Darren Huang', 'j21035942@student.newinti.edu.my', '81dc9bdb52d04dc20036dbd8313ed055', 1),
-('J21035943', 'Barry Allen', 'j21034953@student.newinti.edu.my', '$2y$10$Zi.xcHB/HwQfBKFxcpYcBuzEFB8t608QZ/t', 1),
-('J21035944', 'Cindy Smith', 'j21035944@student.newinti.edu.my', '$2y$10$WYCws27byygNt1L0D5J6c.ikHAX6uO/TeCFa5u7pIm345XcQiLJ1m', 2),
-('J22036755', 'Rod', 'J22036755@student.newinti.edu.my', '$2y$10$irnxI94VokHNBU/NAt1b4eKLaLXng0Pz6p0uD9FNOu/zigCJsiPku', 1);
+INSERT INTO `students` (`stud_id`, `stud_name`, `stud_email`, `stud_pass`, `dept_ID`, `session`, `programme`, `address`, `phone`, `semester`, `major`) VALUES
+('J22036755', 'Rodrikco Tiovandy', 'J22036755@student.newinti.edu.my', '$2y$10$3r1XE39R0xYysvDeJypU7.sDgx7DQin0TMl5OgwyXdWpFfnYoxGQK', 1, 'FEB2024', 'BCSSUT', 'SS15/6A', 172608213, 5, 'CyberSecurity');
 
 -- --------------------------------------------------------
 
@@ -182,8 +200,8 @@ INSERT INTO `students` (`stud_id`, `stud_name`, `stud_email`, `stud_pass`, `dept
 --
 
 CREATE TABLE `subject` (
-  `Subj_ID` varchar(10) NOT NULL,
-  `Subj_Name` varchar(40) NOT NULL,
+  `subj_code` varchar(10) NOT NULL,
+  `subj_name` varchar(40) NOT NULL,
   `Lect_Id` int(10) NOT NULL,
   `Sess_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -192,7 +210,7 @@ CREATE TABLE `subject` (
 -- Dumping data for table `subject`
 --
 
-INSERT INTO `subject` (`Subj_ID`, `Subj_Name`, `Lect_Id`, `Sess_ID`) VALUES
+INSERT INTO `subject` (`subj_code`, `subj_name`, `Lect_Id`, `Sess_ID`) VALUES
 ('COS10009', 'Introduction to Programming', 123459, 1),
 ('COS10009', 'Introduction to Programming', 123459, 2),
 ('COS30019', 'Introduction to artificial intelligence', 123458, 1),
@@ -248,7 +266,7 @@ ALTER TABLE `session`
 -- Indexes for table `staff`
 --
 ALTER TABLE `staff`
-  ADD UNIQUE KEY `Lect_id` (`Staff_ID`),
+  ADD UNIQUE KEY `Lect_id` (`staff_id`),
   ADD KEY `Role_ID` (`Role_ID`);
 
 --
@@ -262,7 +280,7 @@ ALTER TABLE `students`
 -- Indexes for table `subject`
 --
 ALTER TABLE `subject`
-  ADD PRIMARY KEY (`Subj_ID`,`Sess_ID`),
+  ADD PRIMARY KEY (`subj_code`,`Sess_ID`),
   ADD KEY `Lect_Id` (`Lect_Id`),
   ADD KEY `Sess_ID` (`Sess_ID`);
 
@@ -274,13 +292,13 @@ ALTER TABLE `subject`
 -- AUTO_INCREMENT for table `leave_application`
 --
 ALTER TABLE `leave_application`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `leave_application_assignment`
 --
 ALTER TABLE `leave_application_assignment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- Constraints for dumped tables
