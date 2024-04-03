@@ -7,7 +7,6 @@ if (isset($_POST['Login'])) {
     $student_id = sanitizeInput($_POST['Studentid']);
     $student_pass = sanitizeInput($_POST['Studentpass']);
 
-    echo $student_pass;
     $input = mysqli_query($conn, "SELECT * FROM students WHERE stud_id = '$student_id'");
     $row = mysqli_fetch_array($input);
 
