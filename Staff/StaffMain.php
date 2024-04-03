@@ -18,12 +18,13 @@
 <body>
 <header>
 	<div class ="text-center">
-		<img class ="img-fluid img-thumbnail" src ="images/pic5.png" alt ="INTI Logo"/>
+		<img class ="img-fluid img-thumbnail" src ="../images/INTI.jpg" alt ="INTI Logo" width="300"/>
 	</div>
 	</header>
 <?php
 
-require_once "db.php";
+require_once "../db.php";
+require_once "../Staff/StaffInfo.php";
 
 session_start();
 
@@ -36,43 +37,42 @@ if (!isset($_SESSION['Staff_id']))
 }
 
 $staff_id = $_SESSION['Staff_id'];
-$query = "SELECT Staff_name FROM Staff WHERE Staff_id = '$staff_id'";
-$name = mysqli_query($conn, $query);
 
-
-$sql = "SELECT * FROM Staff S INNER JOIN Roles R ON S.Role_id = R.Role_id WHERE S.Lect_id = '$staff_id'";
+$sql = "SELECT * FROM Staff WHERE staff_id = '$staff_id'";
 $result = mysqli_query($conn, $sql);
-    
+
 if ($result) {
     $row = mysqli_fetch_assoc($result);
-    $role = $row['Role_name'];
-	$Lectname = $row['Staff_name'];
+    $role = $row['roles'];
+	$Lectname = $row['staff_name'];
 
 // Use the role for further processing or validation
     if ($role == "Lecturer") {
         // Retrieve the subject code of the logged-in lecturer
-        $sql = "SELECT Subj_ID FROM subject WHERE lect_id = '$staff_id'";
+        $sql = "SELECT * FROM subject WHERE lect_id = '$staff_id'";
         $result = mysqli_query($conn, $sql);
         $subject_codes = array();
         while ($row = mysqli_fetch_assoc($result)) {
-              $subject_codes[] = $row['Subj_ID'];
+              $subject_codes[] = $row['subj_code'];
         }
 
         echo "<h1>";
 		echo "Welcome " .$Lectname;
 		echo "</h1>";
 		echo "<div class='col-md-12 bg-light text-right'>";
-		echo '<form action="LeaveMainPage.php" method="post">';
+		echo '<form action="LoginForStaff.html" method="post">';
         echo '<input type="submit" class="btn btn-outline-warning" id ="logout" name="logout" value="logout">';
         echo '</form>';
 		echo "</div>";
         echo "<br>Course that you are teaching:<br>";
 		echo "<ul class ='list-group'>";
-		foreach ($subject_codes as $code) {
-			echo "<li class ='list-group-item list-group-item-info'>" . $code . "</li>";
-		}
-		echo '</ul>';
+        echo "<ul class ='list-group'>";
+        foreach ($subject_codes as $code => $name) {
+            echo "<li class ='list-group-item list-group-item-info'> $name</li>";
+        }
+        echo '</ul>';
 		
+    
         // Retrieve leave applications for the lecturer's subject
         $leave_applications = array();
         foreach($subject_codes as $subject_code){
@@ -131,14 +131,13 @@ if ($result) {
 			}
             
             echo "<td>" . $application['id'] . "</td>";
-            echo "<td>" . $application['leave_ref'] . "</td>";
             echo "<td>" . $application['stud_id'] . "</td>";
             echo "<td>" . $application['stud_name'] . "</td>";
             echo "<td>" . $application['startDate'] . "</td>";
             echo "<td>" . $application['endDate'] . "</td>";
-	    echo "<td><embed type='application/pdf' src='file/" . $application['files'] . "' width='500' height='300'></td>";
+            echo "<td><a href='../file/" . $application['documents'] . "' target='_blank'>View Supporting Documents</a></td>";
             echo "<td>" . $application['reason'] . "</td>";
-            echo "<td>" . $application['status'] . "</td>";
+            echo "<td>" . $application['status'] . "</td>";            
 	    echo "<td>";
 	    echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
 	    echo "<input type='hidden' name='leaveId' value='" . $application['id'] . "'>";
@@ -154,6 +153,7 @@ if ($result) {
        } else{
         echo "<br><br>No leave application available for now";
       }
+
 
     } elseif ($role == "Dean") {
         $sql = mysqli_query($conn, "SELECT * FROM leave_application");
@@ -252,6 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$rejected = "UPDATE leave_application SET status = 'Rejected' WHERE id = '$leaveId'";
 		if (mysqli_query($conn, $rejected)) {
 			echo '<script>alert("Status changed to Rejected!");</script>';
+            echo '<script>window.location.href = "StaffMain.php";</script>';
 		} else {
 			echo "Error: " . $rejected . "<br>" . mysqli_error($conn);
 		}
@@ -260,6 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$approved = "UPDATE leave_application SET status = 'Approved' WHERE id = '$leaveId'";
 		if (mysqli_query($conn, $approved)) {
 			echo '<script>alert("Status changed to Approved!");</script>';
+            echo '<script>window.location.href = "StaffMain.php";</script>';
 		} else {
 			echo "Error: " . $approved . "<br>" . mysqli_error($conn);
 		}

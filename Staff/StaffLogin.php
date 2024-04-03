@@ -1,5 +1,5 @@
 <?php
-	require "db.php";
+	require_once"../db.php";
 
 	if (isset($_POST['Login'])) {
 		$staff_id = $_POST['Staffid'];
@@ -13,7 +13,6 @@
 			echo "Login successful";
 			session_start();
 			$_SESSION['Staff_id'] = $staff_id;
-			$_SESSION['Staff_pwd'] = $row['Staff_name'];
 			header("Location: StaffMain.php");
 			exit();
 		} else {
@@ -22,7 +21,8 @@
 			exit();
 		}
 	} else {
-		echo '<script>alert("No user found"); history.go(-1)</script>';
+		echo '<script>alert("Please login");</script>';
+		echo '<script>window.location.href = "LoginForStaff.html";</script>';
 		exit();
 	}
 	mysqli_close($conn);
