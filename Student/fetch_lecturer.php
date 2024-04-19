@@ -6,7 +6,7 @@ $subjectCode = $_GET['subject_code'];
 // Query the database to fetch the lecturer name based on the subject code
 $query = "SELECT s.staff_name
           FROM Subject sub
-          INNER JOIN Staff s ON sub.Lect_Id = s.staff_id
+          INNER JOIN Staff s ON sub.staff_id = s.staff_id
           WHERE sub.subj_code = '$subjectCode'";
 
 $result = $conn->query($query);

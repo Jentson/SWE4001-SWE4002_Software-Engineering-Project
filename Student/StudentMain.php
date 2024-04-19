@@ -8,7 +8,6 @@ session_start();
 if (!isset($_SESSION['stud_id'])) {
     echo '<script>alert("You need to login first!");</script>';
     echo '<script>window.location.href = "LoginForStudent.html";</script>';
-    session_destroy();
     exit();
 }
 
@@ -43,7 +42,7 @@ mysqli_close($conn);
 <body>
     <header>
         <div class="text-center">
-            <img class="img-fluid img-thumbnail" src="../images/INTI.jpg" alt="INTI Logo" />
+            <img class="img-fluid img-thumbnail" src="../images/INTI.jpg" alt="INTI Logo" width="200" />
         </div>
     </header>
 
@@ -77,7 +76,7 @@ mysqli_close($conn);
                 <?php foreach ($leaveApplications as $application): ?>
                     <?php
                     $bgColor = '';
-                    switch ($application['status']) {
+                    switch ($application['lecturer_approval_status']) {
                         case 'Pending':
                             $bgColor = 'bg-warning';
                             break;
@@ -98,7 +97,7 @@ mysqli_close($conn);
                         <a href="../file/<?php echo $application['documents']; ?>" target="_blank">View Supporting Documents</a>
                         </td>
                         <td><?php echo $application['reason']; ?></td>
-                        <td><?php echo $application['status']; ?></td>
+                        <td><?php echo $application['lecturer_approval_status']; ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>

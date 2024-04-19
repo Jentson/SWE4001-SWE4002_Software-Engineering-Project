@@ -7,12 +7,12 @@ $staff_id = $_POST['staff_id'];
 $staff_name = $_POST['staff_name'];
 $staff_email = $_POST['staff_email'];
 $password = $_POST['staff_pass'];
-echo $password;
+
 // Hash the password
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 // Add staff details into table
-$query = "INSERT INTO staff (Staff_ID, Staff_name, Staff_email, Staff_pass, role_ID) VALUES (?,?,?,?,2)";
+$query = "INSERT INTO staff (staff_id, staff_name, staff_email, staff_pass) VALUES (?,?,?,?)";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("isss", $staff_id, $staff_name, $staff_email, $hashed_password);
 

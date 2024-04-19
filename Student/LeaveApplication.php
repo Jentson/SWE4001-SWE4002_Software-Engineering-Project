@@ -88,7 +88,7 @@ require_once "LeaveSubmit.php";
   <body>  
   <section class="container my-2 bg-dark w-50 text-light p-2">
         <header class="text-center">
-            <h1 class="display-6">Student Page</h1>
+            <h1 class="display-6">Leave Application Page</h1>
         </header>
   <form method="POST" action="LeaveSubmit.php" enctype="multipart/form-data">
         <div class="col-12">
@@ -109,13 +109,12 @@ require_once "LeaveSubmit.php";
         </div>
         <div class="col-12">
           <label for="staticEmail" class="form-label">Phone Number</label>
-          <input type="text" readonly class="form-control" name="phone" value="<?php echo $studentInfo['phone']; ?>">
+          <input type="text"  name="phone" value="<?php echo $studentInfo['phone']; ?>">
         </div>
         <div class="col-12">
           <label for="staticEmail" class="form-label">Address</label>
-          <input type="text" readonly class="form-control" name="session" value="<?php echo $studentInfo['address']; ?>">
+          <input type="text"  name="session" value="<?php echo $studentInfo['address']; ?>">
         </div>
-
         <div class="form-group col-md-6">
        <label for="subjectCode" class="form-label">Subject Code</label>
        <div class="input-group">
