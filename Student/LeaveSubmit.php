@@ -16,7 +16,7 @@ if (!isset($_SESSION['stud_id'])) {
 $student_id = $_SESSION['stud_id'];
 $studentInfo = getStudentInfo($conn, $student_id);
 $student_name = $studentInfo['stud_name'];
-$leave_ref = $student_id;
+$student_state = $studentInfo['state'];
 
 ob_start();
 
@@ -28,8 +28,8 @@ if (isset($_POST['Submit'])) {
     $fileType = mime_content_type($fileTmpName);
 
     if ($fileType === 'application/pdf') {
-        $destination = '../file/' . uniqid() . '_' . $fileName; // Unique filename
-        if (!move_uploaded_file($fileTmpName, $destination)) {
+        $fileDestination = '../file/' . uniqid() . '_' . $fileName; // Unique filename
+        if (!move_uploaded_file($fileTmpName, $fileDestination)) {
             error_log("Error moving file to destination.");
             exit();
         }
@@ -50,11 +50,29 @@ if (isset($_POST['Submit'])) {
     if (!empty($addedSubjects)) {
         // Insert the data into the database for each added subject
         foreach ($addedSubjects as $subject) {
-            $lecturer_status = "Pending";
-            $hop_status = "Pending";
-            $query = "INSERT INTO leave_application (leave_ref, stud_id, stud_name, subj_code, startDate, endDate, documents, reason, lecturer_approval_status, hop_approval) 
-            VALUES ('$leave_ref','$student_id', '$student_name', '" . mysqli_real_escape_string($conn, $subject['code']) . "', '$startLeave', '$endLeave', '$destination', '" . mysqli_real_escape_string($conn, $reason) . "', 
-            '$lecturer_status', '$hop_status')";
+            $query = "INSERT INTO leave_application (
+                stud_id, 
+                stud_name, 
+                subj_code, 
+                startDate, 
+                endDate, 
+                documents, 
+                reason, 
+                lecturer_approval_status, 
+                ioav_approval,
+                hop_approval
+            ) VALUES (
+                '$student_id', 
+                '$student_name', 
+                '" . mysqli_real_escape_string($conn, $subject['code']) . "', 
+                '$startLeave', 
+                '$endLeave', 
+                '$fileDestination', 
+                '" . mysqli_real_escape_string($conn, $reason) . "', 
+                'Pending', 
+                'Pending', 
+                'Pending'
+            )";                       
             $result = mysqli_query($conn, $query);
 
             if ($result) {
@@ -65,13 +83,28 @@ if (isset($_POST['Submit'])) {
                     $lecturer_id_row = mysqli_fetch_assoc($lecturer_id_result);
                     $lecturer_id = $lecturer_id_row['staff_id'];
                     // Insert record into lecturer_approval table
-                    $request_query = "INSERT INTO lecturer_approval (leave_id, lecturer_id, lect_status) 
-                    VALUES ('$leave_id', '$lecturer_id', '0')";
+                    $request_query = "INSERT INTO lecturer_approval (leave_id, lecturer_id, status) 
+                    VALUES ('$leave_id', '$lecturer_id', 'Pending')";
                     $approval_result = mysqli_query($conn, $request_query);
 
+                    if ($student_state == "International"){
+                    //Insert into IOAV_table
+                    $hop_application = "INSERT INTO IOAV_approval (leave_id, IOAV_id, process)
+                    VALUES ('$leave_id', '123463', 'Pending')";
+                    $hop_result = mysqli_query($conn, $hop_application);
+                    } elseif ($student_state == "Local") {
+                        $nonInternational = "UPDATE leave_application SET ioav_approval = 'Not Required' WHERE id = '$leave_id'";
+                        $result = mysqli_query($conn, $nonInternational);
+                        if (!$result) {
+                            echo "Error updating record: " . mysqli_error($conn);
+                        }
+                    } else {
+                        echo "";
+                    }
+                    
                     //Insert into HOP_table
-                    $hop_application = "INSERT INTO hop_approval (leave_id, hop_approval, process)
-                    VALUES ('$leave_id', '123460', '0')";
+                    $hop_application = "INSERT INTO hop_approval (leave_id, hop_id, process)
+                    VALUES ('$leave_id', '123460', 'Pending')";
                     $hop_result = mysqli_query($conn, $hop_application);
 
                     if (!$hop_result) {

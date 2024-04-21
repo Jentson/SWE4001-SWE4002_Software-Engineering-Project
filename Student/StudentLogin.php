@@ -15,7 +15,6 @@ if (isset($_POST['Login'])) {
         echo "Login successful";
         session_start();
         $_SESSION['stud_id'] = $student_id;
-        $_SESSION['stud_pwd'] = $row['stud_name'];
         header("Location: StudentMain.php");
     } else {
         // Login failed, show error message

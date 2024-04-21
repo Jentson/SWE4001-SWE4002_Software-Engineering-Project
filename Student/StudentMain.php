@@ -15,12 +15,23 @@ $studentId = $_SESSION['stud_id'];
 
 // Get student informations
 $studentInfo = getStudentInfo($conn, $studentId);
+$isInternationalStudent = $studentInfo['state'] == 'International';
 
 // Get the leave applications for the student
-$query = "SELECT * FROM leave_application WHERE stud_id = '$studentId'";
+$query = "SELECT * FROM leave_application 
+WHERE stud_id = '$studentId'";
+
 $result = mysqli_query($conn, $query);
 $leaveApplications = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+// Check if the logout button has been pressed
+if (isset($_POST['logout'])) {
+    // Destroy the session
+    session_unset();     // unset $_SESSION variable for the runtime
+    session_destroy();   // destroy session data in storage
+    header("Location: LoginForStudent.html");  // Redirect to login page
+    exit();
+}
 
 // Close the database connection
 mysqli_close($conn);
@@ -47,17 +58,18 @@ mysqli_close($conn);
     </header>
 
     <div class="container">
-        <h1>Welcome <?php echo $studentInfo['stud_name']; ?></h1>
+        <p>Welcome <?php echo $studentInfo['stud_name']; ?></p>
         <p> Session: <?php echo $studentInfo['session']; ?> </p>
         <p> Programme: <?php echo $studentInfo['programme']; ?> </p>
         <p> Major: <?php echo $studentInfo['major']; ?> </p>
         <p> Semester: <?php echo $studentInfo['semester']; ?> </p>
+        <p> State: <?php echo $studentInfo['state']; ?> </p>
 
         <div class="col-md-12 bg-light text-right">
             <form action="LeaveApplication.php" method="post">
                 <input type="submit" class="btn btn-outline-warning" name="new" value="Apply for leave">
             </form><br>
-            <form action="LoginForStudent.html" method="post">
+            <form action="" method="post">
                 <input type="submit" class="btn btn-outline-warning" name="logout" value="logout">
             </form>
         </div>
@@ -65,18 +77,22 @@ mysqli_close($conn);
         <div class="table-responsive">
             <table class="table">
                 <tr>
-                    <th scope="col">Leave Reference</th>
+                    <th scope="col">Leave ID</th>
                     <th scope="col">Subject Code</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
                     <th scope="col">File/Evidence</th>
                     <th scope="col">Reason</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Lecturer Status</th>
+                    <?php if ($isInternationalStudent): ?>
+                    <th scope="col">IOAV Approval</th>
+                    <?php endif; ?>
+                    <th scope="col">HOP Status</th>
                 </tr>
                 <?php foreach ($leaveApplications as $application): ?>
                     <?php
                     $bgColor = '';
-                    switch ($application['lecturer_approval_status']) {
+                    switch ($application['hop_approval']) {
                         case 'Pending':
                             $bgColor = 'bg-warning';
                             break;
@@ -89,7 +105,7 @@ mysqli_close($conn);
                     }
                     ?>
                     <tr scope="row" class="<?php echo $bgColor; ?>">
-                        <td><?php echo $application['leave_ref']; ?></td>
+                        <td><?php echo $application['id']; ?></td>
                         <td><?php echo $application['subj_code']; ?></td>
                         <td><?php echo $application['startDate']; ?></td>
                         <td><?php echo $application['endDate']; ?></td>
@@ -98,6 +114,10 @@ mysqli_close($conn);
                         </td>
                         <td><?php echo $application['reason']; ?></td>
                         <td><?php echo $application['lecturer_approval_status']; ?></td>
+                        <?php if ($isInternationalStudent): ?>
+                        <td><?php echo $application['ioav_approval']; ?></td>
+                        <?php endif; ?>
+                        <td><?php echo $application['hop_approval']; ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>

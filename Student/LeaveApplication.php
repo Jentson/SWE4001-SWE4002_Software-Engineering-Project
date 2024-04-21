@@ -107,10 +107,12 @@ require_once "LeaveSubmit.php";
           <label for="staticEmail" class="form-label">Session</label>
           <input type="text" readonly class="form-control" name="session" value="<?php echo $studentInfo['session']; ?>">
         </div>
+        <br>
         <div class="col-12">
           <label for="staticEmail" class="form-label">Phone Number</label>
           <input type="text"  name="phone" value="<?php echo $studentInfo['phone']; ?>">
         </div>
+        <br>
         <div class="col-12">
           <label for="staticEmail" class="form-label">Address</label>
           <input type="text"  name="session" value="<?php echo $studentInfo['address']; ?>">
@@ -151,7 +153,7 @@ require_once "LeaveSubmit.php";
         </div>
         <div class="mb-3">
           <label for="inputDescription" class="form-label">Description</label>
-          <textarea class="form-control" name="inputDescription" id="inputDescription" rows="4"></textarea>
+          <textarea class="form-control" name="inputDescription" id="inputDescription" rows="4" required></textarea>
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
           <button type="submit" class="btn btn-primary"  name="Submit">Submit</button>

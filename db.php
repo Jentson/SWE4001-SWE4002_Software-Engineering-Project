@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost'; 
-$username = 'root'; 
+$username = 'user'; 
 $password = ''; 
 $database = 'ez4leave'; 
 
