@@ -3,7 +3,7 @@
 $host = 'localhost'; 
 $username = 'user'; 
 $password = ''; 
-$database = 'INTI'; 
+$database = 'ez4leave'; 
 
 $conn = new mysqli($host, $username, $password, $database);
 
