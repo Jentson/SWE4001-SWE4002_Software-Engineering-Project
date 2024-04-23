@@ -18,36 +18,54 @@ $studentInfo = getStudentInfo($conn, $student_id);
 $student_name = $studentInfo['stud_name'];
 $student_state = $studentInfo['state'];
 
+
 ob_start();
 
 if (isset($_POST['Submit'])) {
-    // File upload
-    $pdfFile = $_FILES['files'];
-    $fileName = $_FILES['files']['name'];
-    $fileTmpName = $_FILES['files']['tmp_name'];
-    $fileType = mime_content_type($fileTmpName);
-
-    if ($fileType === 'application/pdf') {
-        $fileDestination = '../file/' . uniqid() . '_' . $fileName; // Unique filename
-        if (!move_uploaded_file($fileTmpName, $fileDestination)) {
-            error_log("Error moving file to destination.");
-            exit();
-        }
-    } else {
-        echo '<script>alert("Only PDF files are allowed. Please refile")</script>';
-        echo '<script>window.location.href = "LeaveApplication.php";</script>';
-        exit();
-    }
+    
+    $assignment_successful = true;
 
     // Retrieve form data
     $startLeave = $_POST['startDate'];
     $endLeave = $_POST['endDate'];
     $reason = sanitizeInput($_POST['inputDescription']);
-    $addedSubjects = isset($_POST['addedSubjects']) ? json_decode($_POST['addedSubjects'], true) : [];
 
-    $assignment_successful = true;
+    $addedSubjects = [];
+
+    if(isset($_POST['enrolled_subjects'])) {
+        // Retrieve the array of checked checkboxes
+        $addedSubjects = $_POST['enrolled_subjects'];
+    } else {
+        error_log("No subject selected"); 
+        $assignment_successful = false;
+    }
 
     if (!empty($addedSubjects)) {
+    //File upload process
+        $pdfFile = $_FILES['files'];
+        $fileName = $_FILES['files']['name'];
+        $fileTmpName = $_FILES['files']['tmp_name'];
+        $fileType = mime_content_type($fileTmpName);
+
+        // Allowed file types
+        $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+
+        if (in_array($fileType, $allowedTypes)) {
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $fileDestination = '../file/' . uniqid('', true) . '.' . $fileExtension; // Unique filename with extension
+
+            if (move_uploaded_file($fileTmpName, $fileDestination)) {
+                echo '<script>alert("File uploaded successfully!")</script>';
+                echo '<script>window.location.href = "LeaveApplication.php";</script>';
+            } else {
+                error_log("Error moving file to destination.");
+                exit();
+            }
+        } else {
+            echo '<script>alert("Only PDF, JPEG, or PNG files are allowed. Please refile.")</script>';
+            echo '<script>window.location.href = "LeaveApplication.php";</script>';
+            exit();
+        }
         // Insert the data into the database for each added subject
         foreach ($addedSubjects as $subject) {
             $query = "INSERT INTO leave_application (
@@ -64,7 +82,7 @@ if (isset($_POST['Submit'])) {
             ) VALUES (
                 '$student_id', 
                 '$student_name', 
-                '" . mysqli_real_escape_string($conn, $subject['code']) . "', 
+                '" . mysqli_real_escape_string($conn, $subject) . "', 
                 '$startLeave', 
                 '$endLeave', 
                 '$fileDestination', 
@@ -77,7 +95,7 @@ if (isset($_POST['Submit'])) {
 
             if ($result) {
                 $leave_id = mysqli_insert_id($conn);
-                $lecturer_id_query = "SELECT staff_id FROM subject WHERE subj_code = '" . mysqli_real_escape_string($conn, $subject['code']) . "'";
+                $lecturer_id_query = "SELECT staff_id FROM subject WHERE subj_code = '" . mysqli_real_escape_string($conn, $subject) . "'";
                 $lecturer_id_result = mysqli_query($conn, $lecturer_id_query);
             if ($lecturer_id_result) {
                     $lecturer_id_row = mysqli_fetch_assoc($lecturer_id_result);
@@ -114,19 +132,21 @@ if (isset($_POST['Submit'])) {
                     
                     if (!$approval_result) {
                         $assignment_successful = false;
-                        error_log("Error inserting record into lecturer_approval table for subject " . $subject['code'] . ": " . mysqli_error($conn));
+                        error_log("Error inserting record into lecturer_approval table for subject " . $subject . ": " . mysqli_error($conn));
                     }
                 } else {
                     $assignment_successful = false;
-                    error_log("Error retrieving lecturer ID for subject " . $subject['code'] . ": " . mysqli_error($conn));
+                    error_log("Error retrieving lecturer ID for subject " . $subject . ": " . mysqli_error($conn));
                 }
             } else {
                 $assignment_successful = false;
-                error_log("Error inserting leave application for subject " . $subject['code'] . ": " . mysqli_error($conn));
+                error_log("Error inserting leave application for subject " . $subject . ": " . mysqli_error($conn));
             }
 
         }
     } else {
+        
+    $assignment_successful = false;
         error_log("No subjects were added.");
     }
 
@@ -136,9 +156,8 @@ if (isset($_POST['Submit'])) {
         echo '<script>window.location.href = "StudentMain.php";</script>';
         exit();
     } else {
-        echo "Error submitting leave applications ." . mysqli_error($conn);
+        echo '<script>alert("No subject added/selected")</script>';
+        echo '<script>window.location.href = "LeaveApplication.php";</script>';
     }
 }
-
-mysqli_close($conn);
 ?>

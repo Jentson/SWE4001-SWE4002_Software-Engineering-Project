@@ -19,19 +19,10 @@ echo "<h1>";
 echo "Welcome " . $staffInfo['staff_name'];
 echo "</h1>";
 echo "<div class='col-md-12 bg-light text-right'>";
-echo '<form action="" method="post">';
+echo '<form action="../Staff/staff_logout.php" method="post">';
 echo '<input type="submit" class="btn btn-outline-warning" name="logout" value="logout">';
 echo '</form>';
 echo "</div>";
-
-// Check if the logout button has been pressed
-if (isset($_POST['logout'])) {
-    // Destroy the session
-    session_unset();     // unset $_SESSION variable for the runtime
-    session_destroy();   // destroy session data in storage
-    header("Location: LoginForStaff.html");  // Redirect to login page
-    exit();
-}
 
 $sql = mysqli_query($conn, 
 "SELECT *, leave_application.id AS leave_id FROM leave_application
@@ -39,8 +30,10 @@ JOIN hop_approval ON leave_application.id = hop_approval.leave_id
 JOIN lecturer_approval ON hop_approval.leave_id = lecturer_approval.leave_id
 JOIN students ON leave_application.stud_id = students.stud_id
 LEFT JOIN ioav_approval ON leave_application.id = ioav_approval.leave_id
-WHERE lecturer_approval.status = 1
+WHERE lecturer_approval.status = 1 
 AND hop_approval.process = 0
+AND leave_application.lecturer_approval_status != 'Rejected'
+AND leave_application.ioav_approval != 'Rejected'
 AND (
     (students.state = 'Local')
     OR

@@ -27,7 +27,7 @@ echo "<h1>";
 echo "Welcome " .$staffInfo['staff_name'];
 echo "</h1>";
 echo "<div class='col-md-12 bg-light text-right'>";
-echo '<form action="" method="post">';
+echo '<form action="../Staff/staff_logout.php" method="post">';
 echo '<input type="submit" class="btn btn-outline-warning" id ="logout" name="logout" value="logout">';
 echo '</form>';
 echo "</div>";
@@ -39,15 +39,6 @@ foreach ($subject_codes as $code => $name) {
     }
 echo '</ul>';
 		
-// Check if the logout button has been pressed
-if (isset($_POST['logout'])) {
-    // Destroy the session
-    session_unset();     // unset $_SESSION variable for the runtime
-    session_destroy();   // destroy session data in storage
-    header("Location: LoginForStaff.html");  // Redirect to login page
-    exit();
-}
-
 // Retrieve leave applications for the lecturer's subjects
 $leave_applications = array();
 foreach ($subject_codes as $subject_code) {

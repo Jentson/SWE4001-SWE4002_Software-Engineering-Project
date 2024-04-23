@@ -24,15 +24,6 @@ WHERE stud_id = '$studentId'";
 $result = mysqli_query($conn, $query);
 $leaveApplications = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-// Check if the logout button has been pressed
-if (isset($_POST['logout'])) {
-    // Destroy the session
-    session_unset();     // unset $_SESSION variable for the runtime
-    session_destroy();   // destroy session data in storage
-    header("Location: LoginForStudent.html");  // Redirect to login page
-    exit();
-}
-
 // Close the database connection
 mysqli_close($conn);
 ?>
@@ -69,7 +60,7 @@ mysqli_close($conn);
             <form action="LeaveApplication.php" method="post">
                 <input type="submit" class="btn btn-outline-warning" name="new" value="Apply for leave">
             </form><br>
-            <form action="" method="post">
+            <form action="../Student/student_logout.php" method="post">
                 <input type="submit" class="btn btn-outline-warning" name="logout" value="logout">
             </form>
         </div>
@@ -77,7 +68,6 @@ mysqli_close($conn);
         <div class="table-responsive">
             <table class="table">
                 <tr>
-                    <th scope="col">Leave ID</th>
                     <th scope="col">Subject Code</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
@@ -90,22 +80,29 @@ mysqli_close($conn);
                     <th scope="col">HOP Status</th>
                 </tr>
                 <?php foreach ($leaveApplications as $application): ?>
-                    <?php
-                    $bgColor = '';
-                    switch ($application['hop_approval']) {
-                        case 'Pending':
-                            $bgColor = 'bg-warning';
-                            break;
-                        case 'Approved':
-                            $bgColor = 'bg-success';
-                            break;
-                        case 'Rejected':
-                            $bgColor = 'bg-danger';
-                            break;
+                <?php
+                $bgColor = '';
+
+                // Check if any of the approvals is rejected
+                if ($application['lecturer_approval_status'] === 'Rejected' || 
+                $application['ioav_approval'] === 'Rejected' || $application['hop_approval'] === 'Rejected') {
+                    $bgColor = 'bg-danger'; // Set background color to red
+                } else {
+                    // Check if hop_approval is pending
+                    if ($application['hop_approval'] === 'Pending') {
+                        $bgColor = 'bg-warning'; // Set background color to yellow
+                    } else {
+                        // Check if any other approval is pending
+                        if ($application['lecturer_approval_status'] === 'Pending' || $application['ioav_approval'] === 'Pending') {
+                            $bgColor = 'bg-warning'; // Set background color to yellow
+                        } else {
+                            // All approvals are either approved or rejected
+                            $bgColor = 'bg-success'; // Set background color to green
+                        }
                     }
-                    ?>
+                }
+                ?>
                     <tr scope="row" class="<?php echo $bgColor; ?>">
-                        <td><?php echo $application['id']; ?></td>
                         <td><?php echo $application['subj_code']; ?></td>
                         <td><?php echo $application['startDate']; ?></td>
                         <td><?php echo $application['endDate']; ?></td>
