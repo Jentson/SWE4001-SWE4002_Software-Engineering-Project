@@ -18,7 +18,6 @@ $studentInfo = getStudentInfo($conn, $student_id);
 $student_name = $studentInfo['stud_name'];
 $student_state = $studentInfo['state'];
 
-
 ob_start();
 
 if (isset($_POST['Submit'])) {
@@ -47,8 +46,8 @@ if (isset($_POST['Submit'])) {
         $fileTmpName = $_FILES['files']['tmp_name'];
         $fileType = mime_content_type($fileTmpName);
 
-        // Allowed file types
-        $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    // Allowed file types
+    $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
 
         if (in_array($fileType, $allowedTypes)) {
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
@@ -66,6 +65,7 @@ if (isset($_POST['Submit'])) {
             echo '<script>window.location.href = "LeaveApplication.php";</script>';
             exit();
         }
+        
         // Insert the data into the database for each added subject
         foreach ($addedSubjects as $subject) {
             $query = "INSERT INTO leave_application (

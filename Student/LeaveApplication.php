@@ -16,6 +16,17 @@ require_once "LeaveSubmit.php";
     <link href="styles/LeaveStud.css" rel="stylesheet">
     <script src="../Student/date.js"></script>
     <title>Leave Form Page</title>>
+<script>
+    document.getElementById('inputFile').addEventListener('change', function(e) {
+    var allowedExtensions = /(\.pdf|\.jpeg|\.jpg|\.png)$/i;
+  if (!allowedExtensions.exec(this.value)) {
+        alert('Invalid file type. Only PDF, JPEG, and PNG files are allowed.');
+        this.value = ''; // Clear the file input
+        return false;
+    }
+  });
+</script>
+
   <body>  
   <section class="container my-2 bg-dark w-50 text-light p-2">
         <header class="text-center">
@@ -104,6 +115,17 @@ require_once "LeaveSubmit.php";
     <label for="inputFile" class="form-label">File/Evidence (Only PDF, JPEG, or PNG files are allowed)</label>
     <input class="form-control" type="file" name="files" id="inputFile" required>
     </div>
+    
+<script>
+    document.getElementById('inputFile').addEventListener('change', function(e) {
+    var allowedExtensions = /(\.pdf|\.jpeg|\.jpg|\.png)$/i;
+      if (!allowedExtensions.exec(this.value)) {
+            alert('Invalid file type. Only PDF, JPEG, and PNG files are allowed.');
+            this.value = ''; // Clear the file input
+            return false;
+        }
+      });
+</script>
 
         <div class="mb-3">
           <label for="inputDescription" class="form-label">Description</label>
