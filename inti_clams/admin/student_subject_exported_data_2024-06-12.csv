@@ -1,0 +1,14 @@
+"Student_Subject ID","Student ID","Student Name","Subject ID","Subject Name","Program ID","Program Name",Session,Semester,"Section ID"
+3,J12345678,abc123,COM10007,"Communication Practice",1,"BCSSUT- (major in Cybersecurity)","=""FEB2024""",5,C1
+4,J20032658,"Ng Chin Shen",COM10007,"Communication Practice",2,"BCSSUT- (major in Data Science)","=""FEB2024""",5,C1
+5,J20032658,"Ng Chin Shen",COS30019,"Introduction to Artificial Intelligence",2,"BCSSUT- (major in Data Science)","=""FEB2024""",5,C1
+59,J22345678,Inter,COS30019,"Introduction to Artificial Intelligence",2,"BCSSUT- (major in Data Science)","=""FEB2024""",5,C1
+8,J20032658,"Ng Chin Shen",ICT30005,"Professional Issues in Information Technology",2,"BCSSUT- (major in Data Science)","=""FEB2024""",5,C2
+58,J12345678,abc123,ICT30005,"Professional Issues in Information Technology",2,"BCSSUT- (major in Data Science)","=""FEB2024""",6,C3
+6,J20032658,"Ng Chin Shen",SWE40001,"Software EnSoftware Engineering Project A",2,"BCSSUT- (major in Data Science)","=""FEB2024""",5,C1
+7,J20032658,"Ng Chin Shen",SWE40002,"Software Engineering Project B",2,"BCSSUT- (major in Data Science)","=""FEB2024""",5,C4
+60,J32345678,Ali,SWE40002,"Software Engineering Project B",2,"BCSSUT- (major in Data Science)","=""FEB2024""",1,0
+63,J42345678,abc123,SWE40003,"Software Engineering Project C",3,"BCSSUT- (major in Software Development)","=""FEB2024""",1,C2
+64,J42345678,abc123,SWE40003,"Software Engineering Project C",3,"BCSSUT- (major in Software Development)","=""FEB2024""",1,C2
+61,J52345678,Alipuda,ICT30005,"Professional Issues in Information Technology",4,"DCS - Data Science","=""FEB2024""",4,2
+62,J52345678,Alipuda,SWE40002,"Software Engineering Project B",4,"DCS - Data Science","=""APR2024""",4,3

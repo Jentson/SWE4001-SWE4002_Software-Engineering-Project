@@ -1,0 +1,13 @@
+"Leave ID","Student ID","Student Name",State,"Subject Code","Start Date","End Date",Reason,Documents,"Lecturer Approval","Lecturer Remarks","IOAV Approval","IOAV Remarks","HOP Approval","HOP Remarks"
+29,J20033009,"Ng Zheng Han ",Local,"COM 10007",2024-06-04,2024-06-05,dsadasd,"No file uploaded",Approved,,"Not Required",,Approved,
+30,J20033009,"Ng Zheng Han ",Local,"COM 10007",2024-05-26,2024-05-27,da,"No file uploaded",Approved,,"Not Required",,Approved,
+31,J333333,InternationalStudent,International,"SWE 40002",2024-06-13,2024-06-14,sasd,"No file uploaded",Approved,,Approved,,Approved,
+32,J333333,InternationalStudent,International,"SWE 40002",2024-06-04,2024-06-05,sda,"No file uploaded",Approved,,Approved,,Approved,
+33,J333333,InternationalStudent,International,"SWE 40002",2024-06-21,2024-06-22,dasdasd,"No file uploaded",Approved,,Pending,,Pending,
+34,J20033009,"Ng Zheng Han ",Local,"TTT 40002",2024-06-21,2024-06-28,sadasd,"No file uploaded",Approved,,Pending,,Pending,
+35,J20033009,"Ng Zheng Han ",Local,"SWE 40002",2024-06-19,2024-06-21,sdasd,"No file uploaded",Approved,,"Not Required",,Pending,
+36,J20033009,"Ng Zheng Han ",Local,"TTT 40002",2024-06-19,2024-06-21,sdasd,"No file uploaded",Approved,,"Not Required",,Pending,
+37,J333333,InternationalStudent,International,"SWE 40002",2024-06-24,2024-06-25,dasda,"No file uploaded",Approved,,Pending,,Pending,
+38,J20033009,"Ng Zheng Han ",Local,"SWE 40002",2024-06-04,2024-06-12,asdasd,"No file uploaded",Approved,,"Not Required",,Pending,
+39,J20033009,"Ng Zheng Han ",Local,"COM 10007",2024-06-04,2024-06-12,asdasd,"No file uploaded",Pending,,"Not Required",,Pending,
+40,J333333,InternationalStudent,International,"SWE 40002",2024-06-28,2024-06-29,dasdaa,"No file uploaded",Pending,,Pending,,Pending,

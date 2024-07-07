@@ -1,0 +1,3 @@
+"Appointment History ID","Time ID","Student ID","Student Name","Schedule Date","Start Time","End Time",Modal,Status,"Staff ID",Reason,"Booking Timestamp"
+1,3,J20033009,"Ng Zheng Han",2024-06-13,11:13:00,12:13:00,Online,booked,L111111,replacement,"2024-06-12 23:13:31"
+2,3,J20033009,"Ng Zheng Han",2024-06-13,11:13:00,12:13:00,Online,completed,L111111,-,"2024-06-12 23:14:02"

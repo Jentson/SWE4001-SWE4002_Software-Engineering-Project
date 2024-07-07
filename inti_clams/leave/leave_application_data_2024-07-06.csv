@@ -1,0 +1,12 @@
+ID,"Student ID","Student Name","Subject Code","Start Date","End Date",File/Evidence,Reason,"Lecturer Status","IOAV Status","HOP Status"
+2,J20033009,"Ng Zheng Han",GG333,2024-07-02,2024-07-03,,test,Approved,"Not Required",Approved
+3,J20033009,"Ng Zheng Han",T111111,2024-06-27,2024-06-28,,test,Approved,"Not Required",Approved
+6,J20033009,"Ng Zheng Han",COM10007,2024-06-27,2024-06-29,,test,Approved,"Not Required",Approved
+7,J20033009,"Ng Zheng Han",COM10007,2024-06-30,2024-07-01,,testing,Approved,"Not Required",Approved
+9,J20033009,"Ng Zheng Han",COM10007,2024-07-02,2024-07-03,,testing,Approved,"Not Required",Approved
+10,J20033009,"Ng Zheng Han",COM10007,2024-07-03,2024-07-04,,testing,Approved,"Not Required",Approved
+14,J20033009,"Ng Zheng Han",COM10007,2024-07-06,2024-07-07,,test,Approved,"Not Required",Approved
+12,"J20033009 ","Ng Zheng Han",COM10007,2024-07-10,2024-07-12,,test,Approved,"Not Required",Approved
+1,J20033009,"Ng Zheng Han",COM10007,2024-06-27,2024-06-28,,test,Approved,"Not Required",Approved
+16,J20033009,"Ng Zheng Han",T111111,2024-07-24,2024-07-25,,Test,Approved,"Not Required",Approved
+17,J20033009,"Ng Zheng Han",GG333,2024-06-29,2024-06-29,,Test,Approved,"Not Required",Approved

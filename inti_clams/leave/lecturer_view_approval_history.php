@@ -1,0 +1,205 @@
+<?php
+include_once "../database/db.php";
+include_once "../validation/session.php";
+
+ini_set('log_errors', 1);
+ini_set('error_log', '../error.log');
+
+$staffId = $_SESSION['Staff_id'];
+
+// Get the leave applications
+$studentId = isset($_GET['studentId']) ? $_GET['studentId'] : '';
+$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : null;
+$end_date = isset($_GET['end_date']) ? $_GET['end_date'] : null;
+
+$query = "SELECT leave_application.*, lecturer_approval.* FROM leave_application 
+JOIN lecturer_approval ON leave_application.leave_id = lecturer_approval.leave_id
+WHERE lecturer_approval.lecturer_id = ? AND lecturer_approval.process = 1";
+
+// Check if student ID is provided and add it to the query
+if (!empty($studentId)) {
+    $query .= " AND leave_application.student_id = ?";
+}
+
+// Check if both start and end dates are provided and add them to the query
+if ($start_date && $end_date) {
+    $query .= " AND leave_application.start_date >= ? AND leave_application.end_date <= ?";
+}
+
+// Validate date range
+if ($start_date && $end_date && $end_date < $start_date) {
+    // Display error message or take appropriate action
+    echo '<script>alert("End date must be after start date");</script>';
+    echo '<script>window.location.href = "lecturer_view_approval_history.php";</script>';
+    exit();
+}
+
+$stmt = mysqli_prepare($con, $query);
+
+// Bind parameters based on the conditions
+if (!empty($studentId) && $start_date && $end_date) {
+    mysqli_stmt_bind_param($stmt, "ssss", $staffId, $studentId, $start_date, $end_date);
+} elseif (!empty($studentId)) {
+    mysqli_stmt_bind_param($stmt, "ss", $staffId, $studentId);
+} elseif ($start_date && $end_date) {
+    mysqli_stmt_bind_param($stmt, "sss", $staffId, $start_date, $end_date);
+} else {
+    mysqli_stmt_bind_param($stmt, "s", $staffId);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$leaveApplications = mysqli_fetch_all($result, MYSQLI_ASSOC);
+mysqli_free_result($result);
+mysqli_stmt_close($stmt);
+
+// Export selected rows to CSV functionality
+if (isset($_POST['export_selected_csv'])) {
+    if (isset($_POST['selected_rows']) && !empty($_POST['selected_rows'])) {
+        $selectedRows = $_POST['selected_rows'];
+        $currentDate = date("Y-m-d");
+        $csvFileName = 'leave_application_data_' . $currentDate . '.csv';
+        $csvFile = fopen($csvFileName, 'w');
+
+        // Write headers to the CSV file
+        $headers = ['ID', 'Student ID', 'Student Name', 'Subject Code', 'Start Date', 'End Date', 'File/Evidence', 'Reason', 'Lecturer Status', 'Hop Status'];
+        fputcsv($csvFile, $headers);
+
+        // Iterate over the data and write each selected row to the CSV file
+        foreach ($leaveApplications as $application) {
+            if (in_array($application['leave_id'], $selectedRows)) {
+                $csvRow = [
+                    $application['leave_id'],
+                    $application['student_id'],
+                    $application['student_name'],
+                    $application['subject_id'],
+                    $application['start_date'],
+                    $application['end_date'],
+                    $application['documents'],
+                    $application['reason'],
+                    $application['lecturer_approval'],
+                    $application['hop_approval']
+                ];
+                fputcsv($csvFile, $csvRow);
+            }
+        }
+
+        // Close the file handle
+        fclose($csvFile);
+
+        // Provide the CSV file for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $csvFileName . '"');
+        readfile($csvFileName);
+
+        // Exit the script
+        exit();
+    } else {
+        echo '<script>alert("No rows selected for export.");</script>';
+        echo '<script>window.location.href = "lecturer_view_approval_history.php";</script>';
+    }
+}
+
+// Close the database connection
+mysqli_close($con);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 m-0 border-0 bd-example m-0 border-0">
+<?php include '../index/staff_navbar.php'; ?>
+        <!-- Page content-->
+
+             <h4 class="mb-3 text-center">Lecturer Approval History</h4><hr>
+             <div class="row mb-3">
+                <div class="col-md-8">
+                    <form method="GET" action="">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Search based on Student ID" name="studentId" value="<?php echo isset($_GET['studentId']) ? $_GET['studentId'] : ''; ?>">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">Search</button>
+                            <a href="../leave/hop_view_approval_history.php" class="btn btn-outline-danger">Reset</a>
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <input type="date" class="form-control" name="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>" placeholder="Start Date">
+                            <input type="date" class="form-control" name="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" placeholder="End Date">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">Search</button>
+                            <a href="../leave/hop_view_approval_history.php" class="btn btn-outline-danger">Reset</a>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+                <form method="POST" action="">
+                <div class="table-responsive">
+                        <table class="table table-bordered text-center table-sm">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col"><input type="checkbox" id="select-all"></th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Student ID</th>
+                                    <th scope="col">Student Name</th>
+                                    <th scope="col">Subject Code</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">File/Evidence</th>
+                                    <th scope="col">Reason</th>
+                                    <th scope="col">Lecturer Status</th>
+                                    <th scope="col">Hop Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($leaveApplications)): ?>
+                                    <?php foreach ($leaveApplications as $application): ?>
+                                        <tr>
+                                            <td><input type="checkbox" name="selected_rows[]" value="<?php echo htmlspecialchars($application['leave_id']); ?>"></td>
+                                            <td><?php echo htmlspecialchars($application['leave_id']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['student_id']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['student_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['subject_id']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['start_date']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['end_date']); ?></td>
+                                            <td>
+                                                <?php
+                                                if (empty($application['documents'])) {
+                                                    echo '-';
+                                                } else {
+                                                    echo '<a href="../file/' . htmlspecialchars($application['documents']) . '" target="_blank">Supporting Documents</a>';
+                                                }
+                                                ?>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($application['reason']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['lecturer_approval']); ?></td>
+                                            <td><?php echo htmlspecialchars($application['hop_approval']); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="11">No leave applications found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit" name="export_selected_csv">Export Selected to CSV</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('select-all').onclick = function() {
+            var checkboxes = document.getElementsByName('selected_rows[]');
+            for (var checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        }
+    </script>
+</body>
+</html>

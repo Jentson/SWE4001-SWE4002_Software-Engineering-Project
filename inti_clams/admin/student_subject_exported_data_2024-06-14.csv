@@ -1,0 +1,6 @@
+"Student_Subject ID","Student ID","Student Name","Subject ID","Subject Name","Program ID","Program Name",Session,Semester,"Section ID"
+2,J20033009,"Ng Zheng Han",COM10007,"Introduction to Programing",1,"BCSSUT-(Major in CyberSecuiry)","=""FEB2025""",4,C2
+4,J20033009,"Ng Zheng Han",GG333,TestProgram,1,"BCSSUT-(Major in CyberSecuiry)","=""FEB2024""",5,C2
+5,J22036755,Rodrikco,TNE30002,Networking,9,TestingForUOH,"=""FEB2024""",3,C1
+6,J22036755,Rodrikco,GG5555,"Subject Test",9,TestingForUOH,"=""FEB2024""",2,C1
+7,J20033009,"Ng Zheng Han",TES3002,AAA,1,"BCSSUT-(Major in CyberSecuiry)","=""FEB2024""",5,C1

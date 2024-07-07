@@ -1,0 +1,9 @@
+"Student ID","Student Name","Student Email","Student Phone Number","Student Identity Number","Student Address",State,Department,Program,Gender,Status
+J12345678,abc123,j12345678@student.newinti.edu.my,2147483647,66666666666666666666,homehomeee,Local,"Swinburne University of Technology","BCSSUT- (major in Cybersecurity)"," Male",Approved
+J20032658,"Ng Chin Shen",j20032658@student.newinti.edu.my,123456777,6666666666666666,home1222,Local,"Swinburne University of Technology","BCSSUT- (major in Data Science)"," Male",Approved
+J20032659,"Emma Johnson",j11111111@student.newinti.edu.my,123456790,60066661,homehomeee,Local,"Swinburne University of Technology","BCSSUT- (major in Software Development)",Female,Approved
+J20032660,"Liam Smith",j11111112@student.newinti.edu.my,123456791,60066662,homehomeee,Local,"Swinburne University of Technology","BCSSUT- (major in Cybersecurity)",Female,Approved
+J22345678,Inter,j22345678@student.newinti.edu.my,666666666,6666666666,66666622hh,International,"Swinburne University of Technology","BCSSUT- (major in Data Science)"," Male",Approved
+J32345678,Ali,j32345678@student.newinti.edu.my,666666,666666,666666,Local,"Swinburne University of Technology","BCSSUT- (major in Data Science)"," Male",Approved
+J42345678,abc123,j42345678@student.newinti.edu.my,66666666,66666666,66666666,Local,"Swinburne University of Technology","BCSSUT- (major in Software Development)"," Male",Approved
+J52345678,Alipuda,j52345678@student.newinti.edu.my,666666,666666,666666,Local,"INTI International University & Colleges","DCS - Data Science"," Male",Approved

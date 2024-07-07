@@ -1,0 +1,4 @@
+"Leave ID","Student ID","Student Name",State,"Subject Code","Start Date","End Date",Reason,Documents,"Lecturer Approval","Lecturer Remarks","IOAV Approval","IOAV Remarks","HOP Approval","HOP Remarks"
+1,J22036755,Rodrikco,International,COM100010,2024-06-04,2024-06-05,test,"No file uploaded",Approved,,Approved,,Approved,
+2,J20032658,"Ng Chin Shen",Local,COM100008,2024-06-04,2024-06-04,dasd,"No file uploaded",Approved,,"Not Required",,Approved,
+5,J20032658,"Ng Chin Shen",Local,COM100008,2024-06-06,2024-06-07,Fever,"No file uploaded",Approved,,"Not Required",,Pending,

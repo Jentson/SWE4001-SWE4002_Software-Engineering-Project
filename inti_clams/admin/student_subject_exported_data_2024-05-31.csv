@@ -1,0 +1,7 @@
+"Student_Subject ID","Student ID","Student Name","Subject ID","Subject Name","Program ID","Program Name",Session,Semester,"Section ID"
+17,j09876540,test,ABC12347,Testing,1,"BCSSUT- (major in Cybersecurity)","=""Feb-24""",4,C2
+37,j09876540,test,ABC12347,Testing,1,"BCSSUT- (major in Cybersecurity)","=""Aug 2024""",4,C2
+39,j09876540,test,ABC12347,Testing,1,"BCSSUT- (major in Cybersecurity)","=""Aug 2024""",4,C1
+13,j09876543,test,COS30019,"Introduction to Artificial Intelligence",2,"BCSSUT- (major in Data Science)","=""Feb-24""",5,C1
+38,j09876543,test,COS30019,"Introduction to Artificial Intelligence",2,"BCSSUT- (major in Data Science)","=""Aug 2024""",5,C1
+40,j09876543,test,COS30019,"Introduction to Artificial Intelligence",2,"BCSSUT- (major in Data Science)","=""Aug 2024""",5,C2
